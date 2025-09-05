@@ -1,0 +1,6 @@
+requests
+beautifulsoup4
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Cors
