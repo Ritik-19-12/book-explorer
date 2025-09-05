@@ -18,14 +18,23 @@ Book Explorer is a **full-stack web app** that scrapes books from [Books to Scra
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/Ritik-19-12/BOOK-EXPLORER.git
+git clone https://github.com/Ritik-19-12/book-explorer.git
 cd book-explorer
+
+cd scraper
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+python scraper.py
+
 cd backend
 python -m venv venv
 .\venv\Scripts\activate
 pip install -r requirements.txt
+
 python -c "from app import create_app; app=create_app(); from models import db; `
 with app.app_context(): db.create_all(); print('DB created')"
+
 python app.py
 Open this in your browser:
 👉 http://127.0.0.1:5000/api/refresh
