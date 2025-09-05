@@ -3,18 +3,18 @@ import os
 from flask import Flask, jsonify, request, abort
 from flask_migrate import Migrate
 from flask_cors import CORS
-from models import db, Book
-from scraper import scrape_all_books  # function we'll create
+from backend.models import db, Book
+from scraper.scraper import scrape_all_books
 
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 def create_app():
     app = Flask(__name__)
-    DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///books.db")
-    app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(BASE_DIR, "books.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
     migrate = Migrate(app, db)
-    CORS(app)  # allow all origins for dev
+    CORS(app)  
 
     @app.route("/")
     def home():
@@ -71,10 +71,15 @@ def create_app():
 
     @app.route("/api/refresh", methods=["POST", "GET"])
     def refresh():
-        # run scraper and store/update DB
-        imported = scrape_all_books(app)  # pass app to allow db context
+        imported = scrape_all_books(app)  
         return jsonify({"status": "ok", "imported": imported})
 
+    @app.cli.command("init-db")
+    def init_db():
+        """Initialize the database."""
+        with app.app_context():
+            db.create_all()
+            print("✅ Database created successfully!")
     return app
 
 if __name__ == "__main__":
