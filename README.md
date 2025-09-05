@@ -24,7 +24,7 @@ cd backend
 python -m venv venv
 .\venv\Scripts\activate
 pip install -r requirements.txt
-python -c "from app import create_app; app=create_app(); from models import db; \
+python -c "from app import create_app; app=create_app(); from models import db; `
 with app.app_context(): db.create_all(); print('DB created')"
 python app.py
 Open this in your browser:
