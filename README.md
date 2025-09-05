@@ -25,17 +25,21 @@ cd scraper
 python -m venv venv
 .\venv\Scripts\activate
 pip install -r requirements.txt
-python scraper.py
 
 cd backend
 python -m venv venv
 .\venv\Scripts\activate
 pip install -r requirements.txt
 
-python -c "from app import create_app; app=create_app(); from models import db; `
-with app.app_context(): db.create_all(); print('DB created')"
+cd ..
+cd book-explorer
+python -m scraper.scraper
+$env:FLASK_APP="backend.app:create_app"
+flask init-db
+✅ Database created successfully!
 
-python app.py
+python -m backend.app
+
 Open this in your browser:
 👉 http://127.0.0.1:5000/api/refresh
 
