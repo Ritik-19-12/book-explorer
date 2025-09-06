@@ -15,6 +15,9 @@ def create_app():
     db.init_app(app)
     migrate = Migrate(app, db)
     CORS(app)
+# Automatically create tables if they don't exist
+    with app.app_context():
+       db.create_all()
 
     @app.route("/")
     def home():
