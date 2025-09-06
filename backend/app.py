@@ -1,4 +1,3 @@
-# backend/app.py
 import os
 from flask import Flask, jsonify, request, abort
 from flask_migrate import Migrate
@@ -7,6 +6,7 @@ from backend.models import db, Book
 from scraper.scraper import scrape_all_books
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
 def create_app():
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(BASE_DIR, "books.db")
@@ -14,11 +14,11 @@ def create_app():
 
     db.init_app(app)
     migrate = Migrate(app, db)
-    CORS(app)  
+    CORS(app)
 
     @app.route("/")
     def home():
-     return {"message": "Backend is running 🚀. Try /api/books or /api/refresh"}
+        return {"message": "Backend is running 🚀. Try /api/books or /api/refresh"}
 
     @app.route("/api/books")
     def list_books():
@@ -35,8 +35,7 @@ def create_app():
             query = query.filter(Book.title.ilike(f"%{q}%"))
         if rating:
             try:
-                rating_i = int(rating)
-                query = query.filter_by(rating=rating_i)
+                query = query.filter_by(rating=int(rating))
             except:
                 pass
         if in_stock in ("true", "True", "1", "yes"):
@@ -71,7 +70,7 @@ def create_app():
 
     @app.route("/api/refresh", methods=["POST", "GET"])
     def refresh():
-        imported = scrape_all_books(app)  
+        imported = scrape_all_books(app)
         return jsonify({"status": "ok", "imported": imported})
 
     @app.cli.command("init-db")
@@ -80,7 +79,9 @@ def create_app():
         with app.app_context():
             db.create_all()
             print("✅ Database created successfully!")
+
     return app
+
 
 if __name__ == "__main__":
     app = create_app()
