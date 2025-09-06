@@ -6,4 +6,5 @@ services:
     buildCommand: |
       pip install --upgrade pip
       pip install -r backend/requirements.txt
-    startCommand: gunicorn backend.app:app
+    startCommand: gunicorn "backend.app:create_app()"
+
