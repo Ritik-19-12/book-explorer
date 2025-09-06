@@ -35,6 +35,19 @@ export default function HomePage() {
       .catch(console.error);
   }, [page, q]);
 
+  const refresh = () => {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/refresh`;
+    fetch(url, { method: "POST" })
+      .then(() => {
+        console.log("Data refresh triggered");
+        // Optionally re-fetch books after refresh
+        setPage(1);
+      })
+      .catch((error) => {
+        console.error("Error triggering data refresh:", error);
+      });
+  };
+
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">Book Explorer</h1>
@@ -49,6 +62,13 @@ export default function HomePage() {
         }}
         className="border px-3 py-2 mb-4 w-full max-w-md"
       />
+
+      <button
+        onClick={refresh}
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
+      >
+        Refresh
+      </button>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {books.map((b) => (
