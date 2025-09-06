@@ -6,6 +6,9 @@ services:
     buildCommand: |
       pip install --upgrade pip
       pip install -r backend/requirements.txt
-    startCommand: gunicorn backend.wsgi:app
-
-
+    postBuildCommand: |
+      export FLASK_APP=backend.app:create_app
+      flask init-db
+    startCommand: gunicorn "backend.app:create_app()"
+    autoDeploy: true
+    plan: free
