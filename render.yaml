@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: book-explorer-backend
+    env: python
+    buildCommand: |
+      apt-get update && apt-get install -y gcc libxml2-dev libxslt-dev python3-dev build-essential
+      pip install --upgrade pip
+      pip install -r backend/requirements.txt
+    startCommand: gunicorn backend.app:app
